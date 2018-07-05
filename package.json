@@ -7,11 +7,13 @@
     "start": "react-scripts start NODE_PATH=src/",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
+    "test:staged": "cross-env CI=true react-scripts test --env=jsdom --findRelatedTests",
     "eject": "react-scripts eject"
   },
   "lint-staged": {
     "src/**/*.js": [
       "eslint --fix",
+      "test:staged",
       "git add"
     ]
   },
