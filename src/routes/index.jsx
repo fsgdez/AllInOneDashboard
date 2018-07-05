@@ -1,9 +1,9 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 // pages
-import Login from "pages/Login";
+import Login from 'pages/Login';
 
 const routes = () => (
   <Router>
