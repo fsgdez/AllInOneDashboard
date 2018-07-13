@@ -1,17 +1,24 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { createStore } from 'redux';
-import CssBaseline from '@material-ui/core/CssBaseline';
 import './styles/index.css';
-import Root from 'components/Root';
-import reducer from 'reducers/index';
+import CssBaseline from '@material-ui/core/CssBaseline';
 import registerServiceWorker from './registerServiceWorker';
 
+// middlewares
+import thunk from 'redux-thunk';
+
+// reducers
+import reducer from 'reducers/index';
+
 // components
+import Root from 'components/Root';
 import { MuiThemeProvider } from '@material-ui/core/styles';
 import theme from 'styles/theme';
 
-const store = createStore(reducer);
+// store
+import { createStore, applyMiddleware } from 'redux';
+const store = createStore(reducer, applyMiddleware(thunk));
+
 ReactDOM.render(
   <MuiThemeProvider theme={theme}>
     <Root store={store}>

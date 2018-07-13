@@ -1,5 +1,5 @@
 const initialState = {
-  profile: {}
+  profile: {},
 };
 
 export default function auth(state = initialState, action) {

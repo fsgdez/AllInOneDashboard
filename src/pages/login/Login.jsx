@@ -1,52 +1,58 @@
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
-import Input from '@material-ui/core/Input';
+import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
+
+// Actions
+import * as authActions from 'actions/auth';
 
 // components
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import InputLabel from '@material-ui/core/InputLabel';
 
-// icons
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
+// views
+import LoginView from './loginView';
 
 const styles = (theme) => ({
   card: {
     width: '100%',
     maxWidth: 360,
-    padding: theme.spacing.unit * 2,
-  },
-  email: {
-  },
-  password: {
-    marginTop: theme.spacing.unit * 2,
-  },
-  login: {
-    marginTop: theme.spacing.unit * 2,
-    marginBottom: theme.spacing.unit * 2,
+    padding: theme.spacing.unit * 4,
+    boxSizing: 'border-box',
   },
   grid: {
     width: '100%',
     height: '100%',
     margin: 0,
     padding: theme.spacing.unit,
+    backgroundColor: '#2196f3',
   },
 });
 
 class Login extends Component {
   state = {
+    tabValue: 'login',
     showPassword: false,
+    emailInput: '',
+    passwordInput: '',
   };
 
   handleLogin = () => {
-    console.log(this.props)
-    this.props.history.push('/dashboard');
+    this.props.authActions.login({});
+  };
+
+  handleShowPassword = () => {
+    this.setState((prevState) => ({
+      showPassword: !prevState.showPassword,
+    }));
+  };
+
+  handleInputChange = (name) => (event) => {
+    this.setState({
+      [name]: event.target.value,
+    });
   };
 
   render() {
@@ -60,33 +66,30 @@ class Login extends Component {
         justify="center"
         spacing={16}
       >
-        <Card className={classes.card} elevation={1}>
-          <div>
-            <TextField
-              fullWidth
-              id="email-input"
-              label="Email"
-              type="text"
-              // margin="normal"
+        <Card className={classes.card} elevation={12}>
+          <Tabs
+            fullWidth
+            indicatorColor="primary"
+            onChange={this.handleChange}
+            textColor="primary"
+            value={this.state.tabValue}
+          >
+            <Tab label="Login" value="login" />
+            <Tab label="Register" value="register" />
+          </Tabs>
+
+          {this.state.tabValue === 'login' ? (
+            <LoginView
+              emailInput={this.state.emailInput}
+              handleInputChange={this.handleInputChange}
+              handleLogin={this.handleLogin}
+              handleShowPassword={this.handleShowPassword}
+              passwordInput={this.state.passwordInput}
+              showPassword={this.state.showPassword}
             />
-          </div>
-          <div>
-            <TextField
-              autoComplete="current-password"
-              className={classes.password}
-              fullWidth
-              id="password-input"
-              label="Password"
-              type="password"
-              // margin="normal"
-            />
-          </div>
-          <Button className={classes.login} fullWidth variant="contained" onClick={this.handleLogin}>
-            Log-In
-          </Button>
-          <Button className={classes.signup} fullWidth variant="contained">
-            Sign-Up
-          </Button>
+          ) : (
+            <div />
+          )}
         </Card>
       </Grid>
     );
@@ -94,4 +97,12 @@ class Login extends Component {
 }
 
 Login.propTypes = {};
-export default withStyles(styles)(Login);
+
+const mapDispatchToProps = (dispatch) => ({
+  authActions: bindActionCreators(authActions, dispatch),
+});
+
+export default connect(
+  null,
+  mapDispatchToProps,
+)(withStyles(styles)(Login));
